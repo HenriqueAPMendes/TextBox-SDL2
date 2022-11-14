@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="file.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
