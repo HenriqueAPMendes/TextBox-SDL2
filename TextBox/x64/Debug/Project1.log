@@ -1,1 +1,7 @@
-﻿  Project1.vcxproj -> C:\Users\hapme\OneDrive\Documentos\Dev\TextBox-SDL2\TextBox\x64\Debug\Project1.exe
+﻿  Textbox.cpp
+C:\Users\hapme\OneDrive\Documentos\Dev\TextBox-SDL2\TextBox\Textbox.cpp(188,48): warning C4244: 'argumento': conversão de 'double' para 'int', possível perda de dados
+C:\Users\hapme\OneDrive\Documentos\Dev\TextBox-SDL2\TextBox\Textbox.cpp(188,33): warning C4244: 'argumento': conversão de 'double' para 'int', possível perda de dados
+C:\Users\hapme\OneDrive\Documentos\Dev\TextBox-SDL2\TextBox\Textbox.cpp(188,18): warning C4244: 'argumento': conversão de 'double' para 'int', possível perda de dados
+  main.cpp
+  Gerando Código...
+  Project1.vcxproj -> C:\Users\hapme\OneDrive\Documentos\Dev\TextBox-SDL2\TextBox\x64\Debug\Project1.exe

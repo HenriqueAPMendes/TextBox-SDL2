@@ -28,10 +28,11 @@ public:
 	void setBoxBackgroundColor(SDL_Color background);
 	void setBoxOutlineColor(SDL_Color outline);
 	void setTextColor(SDL_Color text);
+	void setPosition(int x, int y, int w, int h);
 	bool setFontToHeight(std::string fontPath); //set font according to the height of Rect
 	bool setFont(std::string fontPath, int fontSize); //set font manually
 
-	void run(int windowW = 640, int windowH = 480);
+	void run(std::string message, int windowW = 640, int windowH = 480);
 
 	std::string getInput();
 
@@ -46,6 +47,7 @@ private:
 
 	TTF_Font* font;
 	std::string text = "";
+	std::string message = "";
 
 	SDL_Rect position;
 	const char* background;

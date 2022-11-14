@@ -21,7 +21,7 @@ int main(int argc,char* argv[]){
 	TextBox textBox;
 	textBox.setFontToHeight("font.ttf");
 	//textBox.setBackground("background.png");
-	textBox.run();
+	textBox.run("message1");
 
 	std::cout << textBox.getInput() << std::endl;
 

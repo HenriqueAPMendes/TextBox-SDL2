@@ -63,6 +63,10 @@ void TextBox::setTextColor(SDL_Color text) {
 	textColor = text;
 }//set the text color
 
+void TextBox::setPosition(int x, int y, int w, int h) {
+	position = { x,y,w,h };
+}
+
 bool TextBox::setFontToHeight(std::string fontPath) {
 	int fontSize = 1;
 	bool done = false;
@@ -120,6 +124,17 @@ void TextBox::clearBox() {//prints a clear box to the renderer
 
 		//Set the render draw color to the original, update the renderer and exit the function
 		SDL_SetRenderDrawColor(renderer, OriginalRed, OriginalGreen, OriginalBlue, OriginalAlpha);
+
+		SDL_Surface* tmpSurface;
+		SDL_Texture* tmpTexture;
+		tmpSurface = TTF_RenderText_Solid(font, message.c_str(), textColor);//load a surface with the text
+		tmpTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);//create a texture from the surface
+
+		SDL_Rect messageRect = { 0,0,0,0 };
+		SDL_QueryTexture(tmpTexture, NULL, NULL, &messageRect.w, &messageRect.h);//prepare the texture
+		messageRect = { (position.x + position.w / 2) - messageRect.w/2, position.y - messageRect.h, messageRect.w, messageRect.h };
+
+		SDL_RenderCopy(renderer, tmpTexture, NULL, &messageRect);//copy to the renderer
 		SDL_RenderPresent(renderer);
 	}
 	else { //in case there is a predefined background
@@ -160,17 +175,21 @@ void TextBox::update() {
 
 	SDL_QueryTexture(TextTexture, NULL, NULL, &tmp_Rect.w, &tmp_Rect.h);//prepare the texture
 	SDL_RenderCopy(renderer, TextTexture, NULL, &tmp_Rect);//copy to the renderer
+
+	
+
 	SDL_RenderPresent(renderer);//update renderer
 
 	SDL_DestroyTexture(TextTexture);
 	SDL_FreeSurface(TextSurface);
 }
 
-void TextBox::run(int windowW, int windowH) {
+void TextBox::run(std::string message, int windowW, int windowH) {
+	setPosition(0.1 * windowW, 0.4 * windowH, 0.8 * windowW, position.h);
+	this->message = message;
 	window = SDL_CreateWindow("TextBox", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowW, windowH, SDL_WINDOW_POPUP_MENU);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	//SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	SDL_SetRenderDrawColor(renderer, 192, 192, 192, 255);
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
@@ -182,21 +201,25 @@ void TextBox::run(int windowW, int windowH) {
 	bool done = false;
 
 	while (!done) {
-		SDL_PollEvent(&Event);
-		if (Event.type == SDL_QUIT || (Event.type == SDL_KEYDOWN && Event.key.keysym.scancode == SDL_SCANCODE_RETURN))
-			done = true;
+		while (SDL_PollEvent(&Event)) {
+			if ((Event.type == SDL_WINDOWEVENT && Event.window.event == SDL_WINDOWEVENT_CLOSE)|| 
+				(Event.type == SDL_KEYDOWN && Event.key.keysym.scancode == SDL_SCANCODE_RETURN))
+				done = true;
 
-		else if (Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_BACKSPACE) {
-			eraseOneChar();
-			update();
-		}
-		else if (Event.type == SDL_TEXTINPUT) {
-			appendText(Event.text.text);
-			update();
+			else if (Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_BACKSPACE) {
+				eraseOneChar();
+				update();
+			}
+			else if (Event.type == SDL_TEXTINPUT) {
+				appendText(Event.text.text);
+				update();
+			}
 		}
 
 	}
 	closeFont();
+	if (renderer) SDL_DestroyRenderer(renderer);
+	if (window) SDL_DestroyWindow(window);
 }
 
 std::string TextBox::getInput() {
