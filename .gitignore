@@ -1,4 +1,5 @@
 *.opendb
+.vs/
 
 # Prerequisites
 *.d
